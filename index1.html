@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="ms" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Mini Hub RBT Tingkatan 3 - Reka Bentuk Pemasaran</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#035485',
+                        },
+                        accent: {
+                            amber: '#f59e0b',
+                            rose: '#f43f5e',
+                            emerald: '#10b981',
+                            indigo: '#6366f1',
+                            purple: '#8b5cf6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- html2pdf.js for Certificate Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Custom CSS for 3D Flashcard Flip & Animations -->
+    <style>
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Certificate Print Standard A4 Landscape */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #sijil-container, #sijil-container * {
+                visibility: visible;
+            }
+            #sijil-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+
+        .cert-border {
+            border: 12px double #0d9488;
+        }
+
+        @keyframes pulse-subtle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .animate-pulse-subtle {
+            animation: pulse-subtle 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md">
+                        RBT
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-lg text-slate-900 block leading-tight">Hub RBT T3</span>
+                        <span class="text-xs text-brand-600 font-semibold">Bab 3: Reka Bentuk Pemasaran</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden lg:flex items-center gap-1 text-sm font-semibold text-slate-600">
+                    <a href="#pengenalan" class="px-3 py-2 rounded-lg hover:text-brand-600 hover:bg-slate-100 transition">Pengenalan</a>
+                    <a href="#nota" class="px-3 py-2 rounded-lg hover:text-brand-600 hover:bg-slate-100 transition">Nota Ringkas</a>
+                    <a href="#flashcard" class="px-3 py-2 rounded-lg hover:text-brand-600 hover:bg-slate-100 transition">Flashcard</a>
+                    <a href="#kuiz" class="px-3 py-2 rounded-lg hover:text-brand-600 hover:bg-slate-100 transition">Kuiz</a>
+                    <a href="#padankan" class="px-3 py-2 rounded-lg hover:text-brand-600 hover:bg-slate-100 transition">Game Padankan</a>
+                    <a href="#minigame" class="px-3 py-2 rounded-lg hover:text-brand-600 hover:bg-slate-100 transition">Mini Game</a>
+                    <a href="#ulangkaji" class="px-3 py-2 rounded-lg hover:text-brand-600 hover:bg-slate-100 transition">Ulang Kaji</a>
+                    <a href="#sijil" class="px-3 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition shadow-sm">Skor & Sijil</a>
+                </div>
+
+                <!-- Quick Profile Indicator -->
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleSound()" id="sound-btn" class="p-2 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition" title="Mute/Unmute Bunyi">
+                        <i class="fa-solid fa-volume-high text-lg"></i>
+                    </button>
+                    <a href="#sijil" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl border border-slate-200 transition">
+                        <i class="fa-solid fa-trophy text-amber-500"></i>
+                        <span id="nav-score-display" class="font-bold text-slate-800 text-sm">0%</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header Banner -->
+    <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white relative overflow-hidden py-10 px-4 sm:px-6">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-6xl mx-auto relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div class="md:col-span-7 space-y-4 text-center md:text-left">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-300 border border-brand-500/30">
+                    <i class="fa-solid fa-graduation-cap"></i> RBT Tingkatan 3 • KSSM
+                </span>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                    Digital Mini Hub: <br/>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-rose-300 to-indigo-300">
+                        Reka Bentuk Pemasaran
+                    </span>
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                    Terokai dunia pemasaran produk, fahami saluran komunikasi, jenama & pengiklanan menerusi nota interaktif, permainan & kuiz cabaran!
+                </p>
+            </div>
+
+            <!-- Student Profile Form Card -->
+            <div class="md:col-span-5 bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-3xl shadow-xl text-white space-y-4">
+                <div class="flex items-center gap-3 border-b border-white/10 pb-3">
+                    <div class="w-10 h-10 rounded-full bg-amber-400 text-slate-900 font-bold flex items-center justify-center">
+                        <i class="fa-solid fa-user-graduate text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base">Profil Murid</h3>
+                        <p class="text-xs text-slate-300">Isi maklumat untuk penjanaan sijil</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-200 mb-1">Nama Penuh Murid:</label>
+                        <input type="text" id="student-name-input" placeholder="Contoh: Muhammad Ali Bin Ahmad" 
+                            class="w-full px-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-700 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-brand-400 transition"
+                            oninput="updateStudentProfile()">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-200 mb-1">Kelas:</label>
+                        <input type="text" id="student-class-input" placeholder="Contoh: 3 Cemerlang" 
+                            class="w-full px-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-700 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-brand-400 transition"
+                            oninput="updateStudentProfile()">
+                    </div>
+                </div>
+
+                <div class="pt-2 flex items-center justify-between text-xs text-slate-300 bg-black/20 p-3 rounded-xl border border-white/5">
+                    <span>Status Skor:</span>
+                    <span id="profile-status-badge" class="font-bold text-amber-400">Belum Selesai</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- SECTION 1: PENGENALAN -->
+        <section id="pengenalan" class="scroll-mt-20">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-900">1. Pengenalan Topik</h2>
+                        <p class="text-sm text-slate-500">Bab 3: Reka Bentuk dalam Perniagaan (3.1 Reka Bentuk sebagai Instrumen Pemasaran)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Objectif Card -->
+                    <div class="bg-indigo-50/70 border border-indigo-100 rounded-2xl p-5 space-y-3">
+                        <div class="flex items-center gap-2 text-indigo-700 font-bold text-base">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <h3>Objektif Pembelajaran</h3>
+                        </div>
+                        <ul class="text-xs sm:text-sm text-indigo-950 space-y-2 list-disc list-inside leading-relaxed">
+                            <li>Menyatakan maksud pemasaran (Philip Kotler).</li>
+                            <li>Menerangkan 3 peranan reka bentuk dalam pemasaran.</li>
+                            <li>Mengenal pasti kaedah reka bentuk pengiklanan.</li>
+                            <li>Menganalisis & memilih kaedah pengiklanan berkesan.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Penerangan Ringkas -->
+                    <div class="bg-amber-50/70 border border-amber-100 rounded-2xl p-5 space-y-3">
+                        <div class="flex items-center gap-2 text-amber-800 font-bold text-base">
+                            <i class="fa-solid fa-book-open"></i>
+                            <h3>Penerangan Ringkas</h3>
+                        </div>
+                        <p class="text-xs sm:text-sm text-amber-950 leading-relaxed">
+                            Pemasaran ialah aktiviti perniagaan menyalurkan produk/perkhidmatan daripada pengeluar kepada pengguna. Reka bentuk pengiklanan berfungsi sebagai saluran komunikasi utama untuk memenuhi keperluan & kehendak pembeli.
+                        </p>
+                    </div>
+
+                    <!-- Kepentingan -->
+                    <div class="bg-emerald-50/70 border border-emerald-100 rounded-2xl p-5 space-y-3">
+                        <div class="flex items-center gap-2 text-emerald-800 font-bold text-base">
+                            <i class="fa-solid fa-star text-amber-500"></i>
+                            <h3>Kepentingan Subjek</h3>
+                        </div>
+                        <p class="text-xs sm:text-sm text-emerald-950 leading-relaxed">
+                            Membantu murid memahami strategi melariskan produk, membina jenama berimpak tinggi, menarik minat pengguna serta mengaplikasi kemahiran keusahawanan kreatif dalam kehidupan seharian.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: NOTA RINGKAS INTERAKTIF -->
+        <section id="nota" class="scroll-mt-20">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-note-sticky"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-extrabold text-slate-900">2. Nota Ringkas & Infografik</h2>
+                            <p class="text-sm text-slate-500">Isi penting, kata kunci dan contoh berdasarkan Buku Teks RBT T3</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs Header -->
+                <div class="flex overflow-x-auto gap-2 border-b border-slate-200 pb-3 mb-6 no-scrollbar">
+                    <button onclick="switchTab('tab-maksud')" id="btn-tab-maksud" class="tab-btn active px-4 py-2 rounded-xl font-bold text-sm bg-brand-600 text-white whitespace-nowrap transition">
+                        1. Maksud & Aliran
+                    </button>
+                    <button onclick="switchTab('tab-peranan')" id="btn-tab-peranan" class="tab-btn px-4 py-2 rounded-xl font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">
+                        2. Peranan Reka Bentuk
+                    </button>
+                    <button onclick="switchTab('tab-penjenamaan')" id="btn-tab-penjenamaan" class="tab-btn px-4 py-2 rounded-xl font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">
+                        3. Penjenamaan & Identiti
+                    </button>
+                    <button onclick="switchTab('tab-kaedah')" id="btn-tab-kaedah" class="tab-btn px-4 py-2 rounded-xl font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">
+                        4. Kaedah Pengiklanan
+                    </button>
+                    <button onclick="switchTab('tab-media')" id="btn-tab-media" class="tab-btn px-4 py-2 rounded-xl font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">
+                        5. Media & Faktor
+                    </button>
+                </div>
+
+                <!-- Tab Content 1: Maksud & Aliran -->
+                <div id="tab-maksud" class="tab-content space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-4">
+                            <div class="bg-brand-50 border-l-4 border-brand-500 p-4 rounded-r-2xl">
+                                <h4 class="font-bold text-brand-900 text-base mb-1">Maksud Pemasaran (Philip Kotler)</h4>
+                                <p class="text-xs sm:text-sm text-brand-950 leading-relaxed">
+                                    Satu proses sosial dan pengurusan untuk memenuhi **keperluan** dan **kehendak** pengguna menerusi proses pertukaran produk dan nilai antara satu sama lain.
+                                </p>
+                            </div>
+                            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-2xl">
+                                <h4 class="font-bold text-amber-900 text-base mb-1">Keperluan vs Kehendak</h4>
+                                <p class="text-xs sm:text-sm text-amber-950 leading-relaxed">
+                                    • **Keperluan:** Perkara asas untuk hidup (makanan, tempat tinggal, pakaian).<br/>
+                                    • **Kehendak:** Keinginan manusia untuk hidup lebih selesa (kereta mewah, telefon pintar mahal).
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Infografik Peta Alir Pemasaran -->
+                        <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-md space-y-3">
+                            <h4 class="text-amber-400 font-bold text-sm text-center">Peta Alir Aktiviti Pemasaran</h4>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs font-medium">
+                                <div class="bg-slate-800 p-2.5 rounded-xl border border-slate-700"> Keperluan & Kehendak</div>
+                                <div class="bg-slate-800 p-2.5 rounded-xl border border-slate-700"> Permintaan</div>
+                                <div class="bg-slate-800 p-2.5 rounded-xl border border-slate-700"> Produk</div>
+                                <div class="bg-slate-800 p-2.5 rounded-xl border border-slate-700"> Nilai</div>
+                                <div class="bg-slate-800 p-2.5 rounded-xl border border-slate-700"> Pertukaran</div>
+                                <div class="bg-slate-800 p-2.5 rounded-xl border border-slate-700"> Urus Niaga</div>
+                                <div class="bg-slate-800 p-2.5 rounded-xl border border-slate-700"> Pasaran</div>
+                                <div class="bg-slate-800 p-2.5 rounded-xl border border-slate-700 text-emerald-400 font-bold"> Pengguna</div>
+                            </div>
+                            <p class="text-[11px] text-slate-400 text-center italic mt-2">Aliran pemasaran daripada Pengeluar -> Pergudangan -> Pengangkutan -> Promosi -> Pengguna Akhir/Organisasi.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content 2: Peranan Reka Bentuk -->
+                <div id="tab-peranan" class="tab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="p-5 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-950 space-y-2">
+                            <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">1</div>
+                            <h4 class="font-bold text-base">Memenuhi Keperluan & Kehendak</h4>
+                            <p class="text-xs leading-relaxed">Melalui 5 ciri utama produk: **Fungsi**, **Reka Bentuk**, **Kekuatan & Kelemahan**, **Nilai Produk**, dan **Trend** semasa.</p>
+                        </div>
+                        <div class="p-5 rounded-2xl bg-rose-50 border border-rose-100 text-rose-950 space-y-2">
+                            <div class="w-8 h-8 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold">2</div>
+                            <h4 class="font-bold text-base">Saluran Komunikasi Pengeluar</h4>
+                            <p class="text-xs leading-relaxed">Menjadi platform DNA identiti produk melalui penjenamaan, kesetiaan jenama, mudah diingat, dikenal pasti & kebolehpercayaan.</p>
+                        </div>
+                        <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-950 space-y-2">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold">3</div>
+                            <h4 class="font-bold text-base">Pengukuhan Penjenamaan</h4>
+                            <p class="text-xs leading-relaxed">Membuat rakan perkongsian teknologi/produk (contoh: Proton & Geely/Mitsubishi) dan rakan strategik perniagaan (MODENAS & KYMCO/BAJAJ).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content 3: Penjenamaan -->
+                <div id="tab-penjenamaan" class="tab-content hidden space-y-4">
+                    <h4 class="font-bold text-slate-800 text-base">4 Bentuk Penjenamaan Produk (Identiti DNA)</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                            <span class="text-xs font-bold text-brand-600 bg-brand-50 px-2 py-1 rounded-md">Bentuk Nama (Brand Name)</span>
+                            <h5 class="font-bold text-slate-900 mt-2 text-sm">Nombor, Perkataan / Huruf</h5>
+                            <p class="text-xs text-slate-600 mt-1">Boleh disebut secara lisan.<br/><strong>Contoh:</strong> PROTON, Pos Malaysia, SKTM.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md">Bentuk Cap (Brand Mark)</span>
+                            <h5 class="font-bold text-slate-900 mt-2 text-sm">Simbol, Logo & Warna</h5>
+                            <p class="text-xs text-slate-600 mt-1">Bentuk visual grafik unik.<br/><strong>Contoh:</strong> Tabung Haji, PETRONAS.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                            <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-md">Cap Dagangan (Trademark)</span>
+                            <h5 class="font-bold text-slate-900 mt-2 text-sm">Simbol Legal (™ / ®)</h5>
+                            <p class="text-xs text-slate-600 mt-1">Hak cipta dilindungi undang-undang.<br/><strong>Contoh:</strong> Lexus, Jasmine, KFC.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">Bentuk Persendirian</span>
+                            <h5 class="font-bold text-slate-900 mt-2 text-sm">Trade Character</h5>
+                            <p class="text-xs text-slate-600 mt-1">Menonjolkan individu/pelopor.<br/><strong>Contoh:</strong> Mak Siti, Adabi, KFC (Colonel Sanders).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content 4: Kaedah Pengiklanan -->
+                <div id="tab-kaedah" class="tab-content hidden space-y-4">
+                    <h4 class="font-bold text-slate-800 text-base">7 Kaedah Reka Bentuk Pengiklanan</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200"><strong>1. Matlamat Produk:</strong> Iklan beri maklumat terperinci & fungsi khas.</div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200"><strong>2. Penyampaian Fakta:</strong> Fakta tepat teknikal pengoperasian produk.</div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200"><strong>3. Demonstrasi:</strong> Tunjuk cara guna sebenar (video/rakaman).</div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200"><strong>4. Perbandingan:</strong> Bandingkan produk baharu dengan lama/pesaing.</div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200"><strong>5. Kiasan / Ibarat:</strong> Penegasan psikologi kelebihan produk.</div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200"><strong>6. Kenyataan Merangsang:</strong> Slogan memujuk pelanggan berfikir ("Berkilat Tanpa Penat").</div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200"><strong>7. Gambar Pegun:</strong> Foto pegun sebagai tumpuan fokus media cetak.</div>
+                    </div>
+                </div>
+
+                <!-- Tab Content 5: Media & Faktor -->
+                <div id="tab-media" class="tab-content hidden space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-slate-800 text-sm">3 Media Pengiklanan Utama:</h4>
+                            <ul class="text-xs text-slate-700 space-y-2 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                <li>• **Media Cetak:** Surat khabar, majalah, brosur, katalog, poster.</li>
+                                <li>• **Media Elektronik:** Televisyen (audio & visual), Radio (audio), Papan Digital.</li>
+                                <li>• **Media Sosial:** Facebook, Instagram, TikTok, Blog.</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-slate-800 text-sm">5 Faktor Pemilihan Media:</h4>
+                            <ul class="text-xs text-slate-700 space-y-1.5 bg-amber-50/70 p-4 rounded-xl border border-amber-200">
+                                <li>1. **Jenis & Sifat Produk** (contoh: barangan demo perlukan TV/media sosial)</li>
+                                <li>2. **Kos Pengiklanan** (sesuai bajet perniagaan)</li>
+                                <li>3. **Luas Pasaran** (liputan tempatan vs antarabangsa)</li>
+                                <li>4. **Sasaran Pengguna** (umur, demografi)</li>
+                                <li>5. **Saiz Perniagaan** (PKS vs Syarikat Besar)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: FLASHCARD INTERAKTIF -->
+        <section id="flashcard" class="scroll-mt-20">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-clone"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-extrabold text-slate-900">3. Flashcard Interaktif</h2>
+                            <p class="text-sm text-slate-500">Klik kad untuk 'flip' dan uji ingatan anda!</p>
+                        </div>
+                    </div>
+                    <span id="flashcard-progress" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-200 self-start sm:self-auto">
+                        Kad Dilihat: 0 / 8
+                    </span>
+                </div>
+
+                <!-- Grid Flashcards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Flashcard 1 -->
+                    <div onclick="flipCard(this, 1)" class="flashcard-item h-52 perspective-1000 cursor-pointer group">
+                        <div class="card-inner w-full h-full relative transform-style-3d transition-transform duration-500 shadow-md rounded-2xl border border-slate-200">
+                            <!-- Front -->
+                            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-indigo-900 text-white rounded-2xl p-5 flex flex-col justify-between backface-hidden">
+                                <span class="text-[10px] uppercase font-bold text-amber-400 tracking-wider">Konsep Utama</span>
+                                <h3 class="font-bold text-base text-center">Apakah Maksud Pemasaran?</h3>
+                                <p class="text-[10px] text-slate-300 text-center"><i class="fa-solid fa-hand-pointer mr-1"></i> Klik untuk lihat jawapan</p>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute inset-0 bg-brand-600 text-white rounded-2xl p-5 flex flex-col justify-center items-center text-center backface-hidden rotate-y-180 space-y-2">
+                                <p class="text-xs leading-relaxed font-medium">Aktiviti menyalurkan barang & perkhidmatan daripada pengeluar kepada pengguna untuk memenuhi keperluan & kehendak (Philip Kotler).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 2 -->
+                    <div onclick="flipCard(this, 2)" class="flashcard-item h-52 perspective-1000 cursor-pointer group">
+                        <div class="card-inner w-full h-full relative transform-style-3d transition-transform duration-500 shadow-md rounded-2xl border border-slate-200">
+                            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-indigo-900 text-white rounded-2xl p-5 flex flex-col justify-between backface-hidden">
+                                <span class="text-[10px] uppercase font-bold text-rose-400 tracking-wider">Peranan Reka Bentuk</span>
+                                <h3 class="font-bold text-base text-center">Nyatakan 3 Peranan Reka Bentuk Pemasaran</h3>
+                                <p class="text-[10px] text-slate-300 text-center"><i class="fa-solid fa-hand-pointer mr-1"></i> Klik untuk flip</p>
+                            </div>
+                            <div class="absolute inset-0 bg-rose-600 text-white rounded-2xl p-5 flex flex-col justify-center text-center backface-hidden rotate-y-180 space-y-1 text-xs">
+                                <p>1. Memenuhi keperluan & kehendak pengguna</p>
+                                <p>2. Saluran komunikasi pengeluar</p>
+                                <p>3. Mengukuhkan penjenamaan produk</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 3 -->
+                    <div onclick="flipCard(this, 3)" class="flashcard-item h-52 perspective-1000 cursor-pointer group">
+                        <div class="card-inner w-full h-full relative transform-style-3d transition-transform duration-500 shadow-md rounded-2xl border border-slate-200">
+                            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-indigo-900 text-white rounded-2xl p-5 flex flex-col justify-between backface-hidden">
+                                <span class="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">Penjenamaan</span>
+                                <h3 class="font-bold text-base text-center">Apakah Brand Mark (Bentuk Cap)?</h3>
+                                <p class="text-[10px] text-slate-300 text-center"><i class="fa-solid fa-hand-pointer mr-1"></i> Klik untuk flip</p>
+                            </div>
+                            <div class="absolute inset-0 bg-emerald-600 text-white rounded-2xl p-5 flex flex-col justify-center items-center text-center backface-hidden rotate-y-180">
+                                <p class="text-xs leading-relaxed">Penggunaan bentuk simbol, reka bentuk logo, warna atau huruf yang unik.<br/><strong>Contoh:</strong> Tabung Haji, PETRONAS.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 4 -->
+                    <div onclick="flipCard(this, 4)" class="flashcard-item h-52 perspective-1000 cursor-pointer group">
+                        <div class="card-inner w-full h-full relative transform-style-3d transition-transform duration-500 shadow-md rounded-2xl border border-slate-200">
+                            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-indigo-900 text-white rounded-2xl p-5 flex flex-col justify-between backface-hidden">
+                                <span class="text-[10px] uppercase font-bold text-amber-400 tracking-wider">Pengiklanan</span>
+                                <h3 class="font-bold text-base text-center">Apakah Kenyataan Merangsang?</h3>
+                                <p class="text-[10px] text-slate-300 text-center"><i class="fa-solid fa-hand-pointer mr-1"></i> Klik untuk flip</p>
+                            </div>
+                            <div class="absolute inset-0 bg-amber-600 text-white rounded-2xl p-5 flex flex-col justify-center items-center text-center backface-hidden rotate-y-180">
+                                <p class="text-xs leading-relaxed">Iklan menggunakan kenyataan/slogan menarik supaya pelanggan berfikir dan terpengaruh.<br/><strong>Contoh:</strong> "Berkilat Tanpa Penat".</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 5 -->
+                    <div onclick="flipCard(this, 5)" class="flashcard-item h-52 perspective-1000 cursor-pointer group">
+                        <div class="card-inner w-full h-full relative transform-style-3d transition-transform duration-500 shadow-md rounded-2xl border border-slate-200">
+                            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-indigo-900 text-white rounded-2xl p-5 flex flex-col justify-between backface-hidden">
+                                <span class="text-[10px] uppercase font-bold text-indigo-300 tracking-wider">Rakan Strategik</span>
+                                <h3 class="font-bold text-base text-center">Contoh Rakan Perkongsian Teknologi</h3>
+                                <p class="text-[10px] text-slate-300 text-center"><i class="fa-solid fa-hand-pointer mr-1"></i> Klik untuk flip</p>
+                            </div>
+                            <div class="absolute inset-0 bg-indigo-700 text-white rounded-2xl p-5 flex flex-col justify-center items-center text-center backface-hidden rotate-y-180">
+                                <p class="text-xs leading-relaxed">Proton dengan Geely / Mitsubishi / Honda.<br/>Membantu menghasilkan model seperti Proton Inspira & Perdana.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 6 -->
+                    <div onclick="flipCard(this, 6)" class="flashcard-item h-52 perspective-1000 cursor-pointer group">
+                        <div class="card-inner w-full h-full relative transform-style-3d transition-transform duration-500 shadow-md rounded-2xl border border-slate-200">
+                            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-indigo-900 text-white rounded-2xl p-5 flex flex-col justify-between backface-hidden">
+                                <span class="text-[10px] uppercase font-bold text-rose-300 tracking-wider">Media Pengiklanan</span>
+                                <h3 class="font-bold text-base text-center">Contoh Media Cetak & Elektronik</h3>
+                                <p class="text-[10px] text-slate-300 text-center"><i class="fa-solid fa-hand-pointer mr-1"></i> Klik untuk flip</p>
+                            </div>
+                            <div class="absolute inset-0 bg-purple-600 text-white rounded-2xl p-5 flex flex-col justify-center text-center backface-hidden rotate-y-180 space-y-1 text-xs">
+                                <p>• **Cetak:** Brosur, Katalog, Surat Khabar, Majalah.</p>
+                                <p>• **Elektronik:** TV, Radio, Papan Digital.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 7 -->
+                    <div onclick="flipCard(this, 7)" class="flashcard-item h-52 perspective-1000 cursor-pointer group">
+                        <div class="card-inner w-full h-full relative transform-style-3d transition-transform duration-500 shadow-md rounded-2xl border border-slate-200">
+                            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-indigo-900 text-white rounded-2xl p-5 flex flex-col justify-between backface-hidden">
+                                <span class="text-[10px] uppercase font-bold text-emerald-300 tracking-wider">Iklan Berkesan</span>
+                                <h3 class="font-bold text-base text-center">6 Ciri Iklan yang Berkesan</h3>
+                                <p class="text-[10px] text-slate-300 text-center"><i class="fa-solid fa-hand-pointer mr-1"></i> Klik untuk flip</p>
+                            </div>
+                            <div class="absolute inset-0 bg-teal-600 text-white rounded-2xl p-5 flex flex-col justify-center text-center backface-hidden rotate-y-180 text-[11px] leading-tight space-y-0.5">
+                                <p>1. Kreatif</p>
+                                <p>2. Memberikan impak</p>
+                                <p>3. Mesej yang jelas</p>
+                                <p>4. Maklumat yang tepat</p>
+                                <p>5. Mudah diingati</p>
+                                <p>6. Unsur unik & tersendiri</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 8 -->
+                    <div onclick="flipCard(this, 8)" class="flashcard-item h-52 perspective-1000 cursor-pointer group">
+                        <div class="card-inner w-full h-full relative transform-style-3d transition-transform duration-500 shadow-md rounded-2xl border border-slate-200">
+                            <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-indigo-900 text-white rounded-2xl p-5 flex flex-col justify-between backface-hidden">
+                                <span class="text-[10px] uppercase font-bold text-amber-300 tracking-wider">Bentuk Persendirian</span>
+                                <h3 class="font-bold text-base text-center">Apakah Trade Character?</h3>
+                                <p class="text-[10px] text-slate-300 text-center"><i class="fa-solid fa-hand-pointer mr-1"></i> Klik untuk flip</p>
+                            </div>
+                            <div class="absolute inset-0 bg-amber-700 text-white rounded-2xl p-5 flex flex-col justify-center items-center text-center backface-hidden rotate-y-180">
+                                <p class="text-xs leading-relaxed">Menonjolkan individu yang merupakan pelopor bagi sesuatu produk.<br/><strong>Contoh:</strong> Mak Siti, Adabi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: KUIZ 10 SOALAN -->
+        <section id="kuiz" class="scroll-mt-20">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-clipboard-question"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-extrabold text-slate-900">4. Kuiz Formatif (10 Soalan)</h2>
+                            <p class="text-sm text-slate-500">Pilih jawapan yang paling tepat dan semak maklum balas secara langsung.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span id="quiz-score-badge" class="px-4 py-2 bg-slate-100 text-slate-800 font-extrabold text-sm rounded-xl border border-slate-200">
+                            Skor Kuiz: 0 / 10
+                        </span>
+                        <button onclick="resetQuiz()" class="px-3 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Questions Container -->
+                <div id="quiz-container" class="space-y-6">
+                    <!-- Questions dynamically rendered or static template -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: GAME EDUKATIF (PADANKAN JAWAPAN) -->
+        <section id="padankan" class="scroll-mt-20">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-puzzle-piece"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-extrabold text-slate-900">5. Game Edukatif: Padankan Istilah</h2>
+                            <p class="text-sm text-slate-500">Pilih kad di Lajur A kemudian pilih pasangan yang sepadan di Lajur B.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span id="match-score-badge" class="px-4 py-2 bg-emerald-50 text-emerald-700 font-extrabold text-sm rounded-xl border border-emerald-200">
+                            Padanan: 0 / 5
+                        </span>
+                        <button onclick="resetMatchGame()" class="px-3 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Mula Semula
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Matching Game Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <!-- Column A: Concepts -->
+                    <div class="space-y-3">
+                        <h4 class="font-bold text-slate-700 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group text-brand-500"></i> Lajur A (Istilah / Tajuk)
+                        </h4>
+                        <div id="col-a-container" class="space-y-2.5">
+                            <!-- Items inserted dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Column B: Descriptions -->
+                    <div class="space-y-3">
+                        <h4 class="font-bold text-slate-700 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-lightbulb text-amber-500"></i> Lajur B (Penerangan / Contoh)
+                        </h4>
+                        <div id="col-b-container" class="space-y-2.5">
+                            <!-- Items inserted dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: MINI GAME (TANGKAP JAWAPAN TEPAT) -->
+        <section id="minigame" class="scroll-mt-20">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-extrabold text-slate-900">6. Mini Game Arcade: Tangkap Istilah Pemasaran</h2>
+                            <p class="text-sm text-slate-500">Klik / Ketik istilah yang **BETUL** dan elakkan istilah yang salah sebelum masa tamat!</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span id="minigame-score-display" class="px-4 py-2 bg-purple-50 text-purple-700 font-extrabold text-sm rounded-xl border border-purple-200">
+                            Skor Mini Game: 0
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Game Canvas Box -->
+                <div class="relative bg-slate-900 rounded-2xl overflow-hidden shadow-inner border border-slate-800 p-4 text-white text-center">
+                    <!-- Overlay Start / Game Over -->
+                    <div id="game-overlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-6 space-y-4">
+                        <div class="w-16 h-16 rounded-full bg-purple-600/30 text-purple-400 flex items-center justify-center text-3xl mb-1 animate-pulse">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h3 id="overlay-title" class="text-2xl font-black text-white">Cabaran Tangkap Jawapan!</h3>
+                        <p id="overlay-desc" class="text-xs sm:text-sm text-slate-300 max-w-md text-center leading-relaxed">
+                            Cari istilah RBT Pemasaran yang sah (contoh: *Brand Mark*, *Kenyataan Merangsang*, *Demonstrasi*) dan klik balok tersebut! Elakkan perkataan pengacau.
+                        </p>
+                        <button onclick="startArcadeGame()" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 font-extrabold text-sm text-white rounded-xl shadow-lg transition transform hover:scale-105">
+                            <i class="fa-solid fa-play mr-2"></i> Mula Permainan (30 Saat)
+                        </button>
+                    </div>
+
+                    <!-- HUD Display -->
+                    <div class="flex items-center justify-between px-4 py-2 bg-slate-800/80 rounded-xl mb-3 text-xs font-bold text-slate-300 border border-slate-700">
+                        <div><i class="fa-solid fa-clock text-amber-400 mr-1"></i> Masa: <span id="game-timer" class="text-white text-sm">30</span>s</div>
+                        <div><i class="fa-solid fa-bullseye text-rose-400 mr-1"></i> Sasaran: <span class="text-emerald-400">Istilah RBT Pemasaran</span></div>
+                        <div><i class="fa-solid fa-star text-amber-400 mr-1"></i> Markah: <span id="game-points" class="text-amber-400 text-sm">0</span></div>
+                    </div>
+
+                    <!-- Active Game Field Area -->
+                    <div id="game-area" class="relative w-full h-80 bg-slate-950 rounded-xl overflow-hidden border border-slate-800/80">
+                        <!-- Floating targets spawned via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: ULANG KAJI & REVISI -->
+        <section id="ulangkaji" class="scroll-mt-20">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-square-check"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-900">7. Ulang Kaji & Checklist Kendiri</h2>
+                        <p class="text-sm text-slate-500">Semak kefahaman anda sebelum menduduki peperiksaan.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Checklist Persediaan -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
+                        <h4 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-brand-600"></i> Checklist Penguasaan Topik
+                        </h4>
+                        <div class="space-y-2 text-xs text-slate-700">
+                            <label class="flex items-center gap-2.5 p-2 bg-white rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                                <input type="checkbox" class="w-4 h-4 text-brand-600 rounded focus:ring-0">
+                                <span>Saya boleh menyatakan maksud pemasaran mengikut Philip Kotler.</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 p-2 bg-white rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                                <input type="checkbox" class="w-4 h-4 text-brand-600 rounded focus:ring-0">
+                                <span>Saya faham 3 peranan utama reka bentuk dalam pemasaran.</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 p-2 bg-white rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                                <input type="checkbox" class="w-4 h-4 text-brand-600 rounded focus:ring-0">
+                                <span>Saya boleh membezakan 4 jenis penjenamaan (Brand Name, Brand Mark, Trademark, Trade Character).</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 p-2 bg-white rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100">
+                                <input type="checkbox" class="w-4 h-4 text-brand-600 rounded focus:ring-0">
+                                <span>Saya mengingati 7 kaedah reka bentuk pengiklanan & 5 faktor pemilihan media.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soalan Pantas Fast Quiz -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
+                        <h4 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-amber-500"></i> Soalan Pantas (Klik Jawapan)
+                        </h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-1">
+                                <p class="font-semibold text-slate-800">S: Apakah jenama tempatan yang berkerjasama dengan Geely?</p>
+                                <button onclick="toggleAnswer(this)" class="text-brand-600 hover:underline font-bold text-[11px]">Tunjukkan Jawapan</button>
+                                <p class="answer-text hidden font-bold text-emerald-600 pt-1">Jawapan: PROTON (Proton Holdings Berhad).</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-1">
+                                <p class="font-semibold text-slate-800">S: Nyatakan contoh iklan bermaksud memujuk.</p>
+                                <button onclick="toggleAnswer(this)" class="text-brand-600 hover:underline font-bold text-[11px]">Tunjukkan Jawapan</button>
+                                <p class="answer-text hidden font-bold text-emerald-600 pt-1">Jawapan: Demonstrasi, Perbandingan, Kiasan/Ibarat, Kenyataan Merangsang.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 8: SKOR KESELURUHAN DAN SIJIL PENCAPAIAN -->
+        <section id="sijil" class="scroll-mt-20">
+            <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-10 shadow-2xl text-white space-y-8 border border-indigo-900/50">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="px-3 py-1 bg-amber-400/20 text-amber-300 border border-amber-400/30 rounded-full text-xs font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-award mr-1"></i> Penilaian Akhir
+                    </span>
+                    <h2 class="text-3xl font-black text-white">Skor Keseluruhan & Sijil Digital</h2>
+                    <p class="text-xs sm:text-sm text-slate-300">
+                        Kumpulkan markah daripada Kuiz, Game Padankan & Mini Game. Capai **sekurang-kurangnya 70%** untuk membuka & memuat turun Sijil Pencapaian Rasmi PDF!
+                    </p>
+                </div>
+
+                <!-- Overall Score Breakdown Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
+                        <span class="text-xs text-slate-300 block">Kuiz 10 Soalan</span>
+                        <span id="summary-quiz-score" class="text-2xl font-black text-amber-400">0 / 10</span>
+                        <span class="text-[10px] text-slate-400 block mt-0.5">(Sumbangan 40%)</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
+                        <span class="text-xs text-slate-300 block">Game Padankan</span>
+                        <span id="summary-match-score" class="text-2xl font-black text-emerald-400">0 / 5</span>
+                        <span class="text-[10px] text-slate-400 block mt-0.5">(Sumbangan 30%)</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
+                        <span class="text-xs text-slate-300 block">Mini Game Arcade</span>
+                        <span id="summary-mini-score" class="text-2xl font-black text-purple-400">0 pts</span>
+                        <span class="text-[10px] text-slate-400 block mt-0.5">(Sumbangan 30%)</span>
+                    </div>
+                    <div class="bg-gradient-to-tr from-brand-600 to-indigo-600 p-4 rounded-2xl text-center border border-brand-400/30">
+                        <span class="text-xs text-brand-100 block">JUMLAH SKOR</span>
+                        <span id="summary-total-score" class="text-3xl font-black text-white">0%</span>
+                        <span id="summary-pass-status" class="text-[10px] font-bold text-amber-300 block mt-0.5">Lulus >= 70%</span>
+                    </div>
+                </div>
+
+                <!-- Action Button & Certificate Status Banner -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
+                    <div class="text-center sm:text-left">
+                        <h4 class="font-bold text-sm text-white">Status Kelayakan Sijil:</h4>
+                        <p id="cert-eligible-msg" class="text-xs text-slate-300">
+                            Sila lengkapkan aktiviti di atas sehingga jumlah skor mencapai sekurang-kurangnya 70%.
+                        </p>
+                    </div>
+                    <button onclick="downloadCertificatePDF()" id="download-cert-btn" disabled 
+                        class="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-xl shadow-lg transition opacity-50 cursor-not-allowed flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-file-pdf text-lg"></i> Muat Turun Sijil (PDF A4 Landskap)
+                    </button>
+                </div>
+
+                <!-- LIVE CERTIFICATE PREVIEW (A4 LANDSCAPE DISPLAY) -->
+                <div class="overflow-x-auto pt-4">
+                    <div id="sijil-container" class="min-w-[800px] w-[900px] mx-auto bg-slate-50 text-slate-900 p-8 rounded-2xl shadow-2xl relative cert-border font-sans my-4" style="aspect-ratio: 1.414 / 1;">
+                        <!-- Certificate Inner Frame -->
+                        <div class="border-2 border-teal-700/40 p-8 h-full flex flex-col justify-between items-center text-center relative bg-white/90">
+                            
+                            <!-- Header Logo & Title -->
+                            <div class="space-y-1">
+                                <div class="flex items-center justify-center gap-2 text-teal-800 font-extrabold text-sm uppercase tracking-widest">
+                                    <i class="fa-solid fa-graduation-cap text-amber-500 text-xl"></i> REKA BENTUK DAN TEKNOLOGI (RBT) TINGKATAN 3
+                                </div>
+                                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight font-serif pt-2" style="font-family: 'Great Vibes', cursive; font-size: 3rem;">
+                                    Sijil Pencapaian Digital
+                                </h1>
+                                <p class="text-xs text-slate-500 uppercase tracking-widest font-semibold">SIJIL KELULUSAN PEMBELAJARAN INTERAKTIF BAB 3</p>
+                            </div>
+
+                            <!-- Body Text -->
+                            <div class="my-4 space-y-3 max-w-xl">
+                                <p class="text-xs text-slate-600">Dengan ini diperakukan bahawa</p>
+                                <h2 id="cert-student-name" class="text-2xl font-black text-teal-900 underline decoration-amber-500 uppercase tracking-wide">
+                                    [ NAMA MURID ]
+                                </h2>
+                                <p id="cert-student-class" class="text-xs font-semibold text-slate-700">
+                                    KELAS: [ KELAS MURID ]
+                                </p>
+                                <p class="text-xs text-slate-600 leading-relaxed pt-1">
+                                    telah berjaya menyelesaikan modul interaktif & menguasai Standard Pembelajaran 
+                                    <strong class="text-slate-900">3.1 Reka Bentuk sebagai Instrumen Pemasaran</strong> dengan pencapaian cemerlang:
+                                </p>
+                                <div class="inline-block px-4 py-1.5 bg-teal-50 border border-teal-200 rounded-full text-teal-900 font-extrabold text-sm">
+                                    SKOR KESELURHAN: <span id="cert-score-num" class="text-amber-600">0%</span>
+                                </div>
+                            </div>
+
+                            <!-- Footer Seals & Signatures -->
+                            <div class="w-full grid grid-cols-3 items-end pt-4 border-t border-slate-200 text-xs">
+                                <div class="text-left space-y-1">
+                                    <p class="text-[10px] text-slate-400">TARIKH:</p>
+                                    <p id="cert-date" class="font-bold text-slate-800">11 Oktober 2026</p>
+                                </div>
+                                <div class="flex justify-center">
+                                    <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 border-2 border-amber-500 flex items-center justify-center text-slate-900 shadow-md">
+                                        <i class="fa-solid fa-ribbon text-2xl text-teal-900"></i>
+                                    </div>
+                                </div>
+                                <div class="text-right space-y-1">
+                                    <p class="text-[10px] text-slate-400">PENGESAHAN MODUL:</p>
+                                    <p class="font-bold text-slate-800">Guru Subjek RBT T3</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-slate-900 text-slate-400 text-center py-6 text-xs border-t border-slate-800">
+        <p>© 2026 Digital Mini Hub RBT Tingkatan 3 • Rekabentuk Pemasaran (Bab 3 KSSM)</p>
+    </footer>
+
+    <script>
+        /* STATE MANAGEMENT */
+        let studentProfile = { name: '', class: '' };
+        let cardFlipped = new Set();
+        let quizAnswers = {};
+        let quizScore = 0;
+        let matchMatches = 0;
+        let miniGameScore = 0;
+        let soundEnabled = true;
+
+        /* WEB AUDIO API FOR SFX */
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.05);
+                } else if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.25);
+                } else if (type === 'wrong') {
+                    osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.15);
+                } else if (type === 'fanfare') {
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.4);
+                }
+            } catch (e) { console.log(e); }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('sound-btn');
+            btn.innerHTML = soundEnabled ? '<i class="fa-solid fa-volume-high text-lg"></i>' : '<i class="fa-solid fa-volume-xmark text-lg text-rose-500"></i>';
+        }
+
+        /* STUDENT PROFILE UPDATE */
+        function updateStudentProfile() {
+            studentProfile.name = document.getElementById('student-name-input').value.trim();
+            studentProfile.class = document.getElementById('student-class-input').value.trim();
+            
+            document.getElementById('cert-student-name').innerText = studentProfile.name || '[ NAMA MURID ]';
+            document.getElementById('cert-student-class').innerText = 'KELAS: ' + (studentProfile.class || '[ KELAS MURID ]');
+            
+            recalculateTotalScore();
+        }
+
+        /* TAB SWITCHER */
+        function switchTab(tabId) {
+            playSound('click');
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('bg-slate-100', 'text-slate-600');
+            });
+
+            document.getElementById(tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('bg-slate-100', 'text-slate-600');
+            activeBtn.classList.add('bg-brand-600', 'text-white');
+        }
+
+        /* FLASHCARD FLIP */
+        function flipCard(cardEl, id) {
+            playSound('click');
+            const inner = cardEl.querySelector('.card-inner');
+            inner.classList.toggle('rotate-y-180');
+            cardFlipped.add(id);
+            document.getElementById('flashcard-progress').innerText = `Kad Dilihat: ${cardFlipped.size} / 8`;
+        }
+
+        /* KUIZ 10 SOALAN DATA */
+        const quizData = [
+            {
+                id: 1,
+                q: "Apakah maksud pemasaran mengikut tokoh terkemuka Philip Kotler?",
+                options: [
+                    "Aktiviti menghasilkan produk baharu sahaja",
+                    "Proses sosial dan pengurusan untuk memenuhi keperluan dan kehendak menerusi pertukaran produk dan nilai",
+                    "Aktiviti menjual barang secara atas talian sahaja",
+                    "Proses mengangkut barang dari gudang ke kedai"
+                ],
+                ans: 1,
+                exp: "Philip Kotler mendefinisikan pemasaran sebagai proses sosial dan pengurusan memenuhi keperluan & kehendak melalui pertukaran nilai."
+            },
+            {
+                id: 2,
+                q: "Manakah antara berikut merujuk kepada KEPERLUAN manusia?",
+                options: ["Telefon pintar flagship", "Makanan dan tempat tinggal", "Kereta sukan mewah", "Jam tangan berjenama"],
+                ans: 1,
+                exp: "Keperluan ialah perkara asas yang mesti ada untuk membolehkan manusia terus hidup."
+            },
+            {
+                id: 3,
+                q: "Apakah 3 peranan utama reka bentuk dalam pemasaran?",
+                options: [
+                    "Pengeluaran, pergudangan, pengangkutan",
+                    "Memenuhi keperluan/kehendak, saluran komunikasi, mengukuhkan penjenamaan",
+                    "Brosur, majalah, televisyen",
+                    "Media cetak, media elektronik, media sosial"
+                ],
+                ans: 1,
+                exp: "Reka bentuk berperanan memenuhi keperluan/kehendak, menjadi saluran komunikasi pengeluar & mengukuhkan penjenamaan."
+            },
+            {
+                id: 4,
+                q: "Syarikat Proton berkerjasama dengan Geely bagi mengeluarkan model kenderaan baharu. Ini merupakan contoh:",
+                options: ["Rakan perkongsian teknologi dan produk", "Iklan gambar pegun", "Media cetak", "Bentuk persendirian"],
+                ans: 0,
+                exp: "Gabungan teknologi antara syarikat pengeluar automotif merupakan Rakan Perkongsian Teknologi dan Produk."
+            },
+            {
+                id: 5,
+                q: "Penjenamaan yang menggunakan nombor, perkataan atau huruf yang boleh disebut dinamakan:",
+                options: ["Brand Mark (Bentuk Cap)", "Trademark (Cap Dagangan)", "Brand Name (Bentuk Nama)", "Trade Character"],
+                ans: 2,
+                exp: "Brand Name mengandungi angka/huruf yang boleh diucapkan lisan seperti PROTON atau SKTM."
+            },
+            {
+                id: 6,
+                q: "Apakah keistimewaan Cap Dagangan (Trademark) yang mempunyai simbol ® atau ™?",
+                options: [
+                    "Percuma dijual kepada sesiapa sahaja",
+                    "Mempunyai hak cipta terpelihara di bawah undang-undang",
+                    "Hanya boleh digunakan di media sosial",
+                    "Dibuat daripada kayu mesra alam"
+                ],
+                ans: 1,
+                exp: "Trademark yang diluluskan pendaftaran dilindungi undang-undang secara eksklusif."
+            },
+            {
+                id: 7,
+                q: "Slogan iklan 'Berkilat Tanpa Penat' menggunakan kaedah pengiklanan:",
+                options: ["Demonstrasi", "Penyampaian Fakta", "Kenyataan Merangsang", "Gambar Pegun"],
+                ans: 2,
+                exp: "Kenyataan merangsang menggunakan slogan kreatif memujuk pelanggan berfikir dan tertarik."
+            },
+            {
+                id: 8,
+                q: "Apakah media pengiklanan yang menyampaikan iklan menerusi gabungan audio dan visual yang berwarna-warni?",
+                options: ["Surat khabar", "Televisyen", "Radio", "Brosur"],
+                ans: 1,
+                exp: "Televisyen ialah media elektronik yang menggabungkan elemen visual, audio dan aksi kreatif."
+            },
+            {
+                id: 9,
+                q: "Manakah BUKAN faktor pemilihan media pengiklanan?",
+                options: ["Jenis dan sifat produk", "Kos pengiklanan", "Warna kegemaran pereka", "Luas pasaran"],
+                ans: 2,
+                exp: "Faktor pemilihan termasuk jenis produk, kos, luas pasaran, sasaran pengguna & saiz perniagaan."
+            },
+            {
+                id: 10,
+                q: "Antara berikut, yang manakah merupakan ciri pengiklanan yang berkesan?",
+                options: ["Mesej yang mengelirukan", "Mesej yang jelas dan mudah diingati", "Tiada maklumat spesifikasi", "Kos amat mahal"],
+                ans: 1,
+                exp: "Pengiklanan berkesan mestilah kreatif, memberi impak, mesej jelas, maklumat tepat & mudah diingati."
+            }
+        ];
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            quizData.forEach((q, idx) => {
+                const qCard = document.createElement('div');
+                qCard.className = 'p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3';
+                
+                let optsHtml = '';
+                q.options.forEach((opt, oIdx) => {
+                    optsHtml += `
+                        <button onclick="selectQuizAns(${q.id}, ${oIdx})" id="q-${q.id}-opt-${oIdx}" 
+                            class="q-opt-btn text-left w-full p-3 rounded-xl bg-white border border-slate-200 hover:border-brand-400 font-medium text-xs sm:text-sm text-slate-800 transition">
+                            ${opt}
+                        </button>
+                    `;
+                });
+
+                qCard.innerHTML = `
+                    <div class="flex items-start justify-between gap-2">
+                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">
+                            Soalan ${idx + 1}: ${q.q}
+                        </h4>
+                        <span id="q-${q.id}-status" class="text-xs font-bold text-slate-400 whitespace-nowrap">Belum dijawab</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                        ${optsHtml}
+                    </div>
+                    <div id="q-${q.id}-exp" class="hidden text-xs p-3 rounded-xl font-medium leading-relaxed"></div>
+                `;
+                container.appendChild(qCard);
+            });
+        }
+
+        function selectQuizAns(qId, oIdx) {
+            playSound('click');
+            const q = quizData.find(item => item.id === qId);
+            quizAnswers[qId] = oIdx;
+
+            const isCorrect = (oIdx === q.ans);
+            if (isCorrect) playSound('correct'); else playSound('wrong');
+
+            // Disable buttons for this question
+            for (let i = 0; i < q.options.length; i++) {
+                const btn = document.getElementById(`q-${qId}-opt-${i}`);
+                btn.disabled = true;
+                if (i === q.ans) {
+                    btn.className = 'q-opt-btn text-left w-full p-3 rounded-xl bg-emerald-100 border-2 border-emerald-500 font-bold text-xs sm:text-sm text-emerald-900';
+                } else if (i === oIdx) {
+                    btn.className = 'q-opt-btn text-left w-full p-3 rounded-xl bg-rose-100 border-2 border-rose-500 font-bold text-xs sm:text-sm text-rose-900';
+                } else {
+                    btn.className = 'q-opt-btn text-left w-full p-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 text-xs sm:text-sm opacity-60';
+                }
+            }
+
+            const statusEl = document.getElementById(`q-${qId}-status`);
+            statusEl.innerText = isCorrect ? 'BETUL ✓' : 'SALAH ✗';
+            statusEl.className = `text-xs font-bold ${isCorrect ? 'text-emerald-600' : 'text-rose-600'}`;
+
+            const expEl = document.getElementById(`q-${qId}-exp`);
+            expEl.classList.remove('hidden');
+            expEl.className = `text-xs p-3 rounded-xl font-medium leading-relaxed ${isCorrect ? 'bg-emerald-50 text-emerald-900 border border-emerald-200' : 'bg-rose-50 text-rose-900 border border-rose-200'}`;
+            expEl.innerHTML = `<strong>Penerangan:</strong> ${q.exp}`;
+
+            // Update Score
+            quizScore = 0;
+            quizData.forEach(item => {
+                if (quizAnswers[item.id] === item.ans) quizScore++;
+            });
+
+            document.getElementById('quiz-score-badge').innerText = `Skor Kuiz: ${quizScore} / 10`;
+            recalculateTotalScore();
+        }
+
+        function resetQuiz() {
+            playSound('click');
+            quizAnswers = {};
+            quizScore = 0;
+            document.getElementById('quiz-score-badge').innerText = `Skor Kuiz: 0 / 10`;
+            renderQuiz();
+            recalculateTotalScore();
+        }
+
+        /* MATCHING GAME DATA & LOGIC */
+        const matchPairs = [
+            { id: 'm1', concept: 'Philip Kotler', def: 'Pakar pemasaran terkemuka pengasas maksud pemasaran' },
+            { id: 'm2', concept: 'Brand Mark (Bentuk Cap)', def: 'Simbol/logo grafik unik seperti Tabung Haji' },
+            { id: 'm3', concept: 'Kenyataan Merangsang', def: 'Slogan kreatif memujuk seperti Berkilat Tanpa Penat' },
+            { id: 'm4', concept: 'Media Cetak', def: 'Brosur, katalog, surat khabar dan majalah' },
+            { id: 'm5', concept: 'Rakan Perkongsian Teknologi', def: 'Perkongsian automotif Proton bersama Mitsubishi & Geely' }
+        ];
+
+        let selectedColA = null;
+        let selectedColB = null;
+
+        function renderMatchGame() {
+            const colA = document.getElementById('col-a-container');
+            const colB = document.getElementById('col-b-container');
+            colA.innerHTML = '';
+            colB.innerHTML = '';
+
+            // Shuffle pairs for col B
+            const shuffledB = [...matchPairs].sort(() => Math.random() - 0.5);
+
+            matchPairs.forEach(p => {
+                const btnA = document.createElement('button');
+                btnA.id = `match-a-${p.id}`;
+                btnA.className = 'w-full text-left p-3 rounded-xl bg-white border border-slate-200 font-bold text-xs sm:text-sm text-slate-800 hover:border-brand-500 transition shadow-sm';
+                btnA.innerText = p.concept;
+                btnA.onclick = () => selectMatchItem('A', p.id);
+                colA.appendChild(btnA);
+            });
+
+            shuffledB.forEach(p => {
+                const btnB = document.createElement('button');
+                btnB.id = `match-b-${p.id}`;
+                btnB.className = 'w-full text-left p-3 rounded-xl bg-white border border-slate-200 text-xs sm:text-sm text-slate-700 hover:border-amber-500 transition shadow-sm';
+                btnB.innerText = p.def;
+                btnB.onclick = () => selectMatchItem('B', p.id);
+                colB.appendChild(btnB);
+            });
+        }
+
+        function selectMatchItem(type, id) {
+            playSound('click');
+            if (type === 'A') {
+                if (selectedColA) document.getElementById(`match-a-${selectedColA}`).classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50');
+                selectedColA = id;
+                document.getElementById(`match-a-${id}`).classList.add('ring-2', 'ring-brand-500', 'bg-brand-50');
+            } else {
+                if (selectedColB) document.getElementById(`match-b-${selectedColB}`).classList.remove('ring-2', 'ring-amber-500', 'bg-amber-50');
+                selectedColB = id;
+                document.getElementById(`match-b-${id}`).classList.add('ring-2', 'ring-amber-500', 'bg-amber-50');
+            }
+
+            if (selectedColA && selectedColB) {
+                if (selectedColA === selectedColB) {
+                    playSound('correct');
+                    // Correct match
+                    const btnA = document.getElementById(`match-a-${selectedColA}`);
+                    const btnB = document.getElementById(`match-b-${selectedColB}`);
+                    btnA.className = 'w-full text-left p-3 rounded-xl bg-emerald-100 border-2 border-emerald-500 font-bold text-xs sm:text-sm text-emerald-900 pointer-events-none';
+                    btnB.className = 'w-full text-left p-3 rounded-xl bg-emerald-100 border-2 border-emerald-500 font-bold text-xs sm:text-sm text-emerald-900 pointer-events-none';
+                    btnA.innerText += ' ✓';
+                    btnB.innerText += ' ✓';
+
+                    matchMatches++;
+                    document.getElementById('match-score-badge').innerText = `Padanan: ${matchMatches} / 5`;
+                    selectedColA = null;
+                    selectedColB = null;
+                    recalculateTotalScore();
+                } else {
+                    playSound('wrong');
+                    // Wrong match highlight shake
+                    const btnA = document.getElementById(`match-a-${selectedColA}`);
+                    const btnB = document.getElementById(`match-b-${selectedColB}`);
+                    btnA.classList.add('bg-rose-100', 'border-rose-400');
+                    btnB.classList.add('bg-rose-100', 'border-rose-400');
+                    setTimeout(() => {
+                        btnA.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50', 'bg-rose-100', 'border-rose-400');
+                        btnB.classList.remove('ring-2', 'ring-amber-500', 'bg-amber-50', 'bg-rose-100', 'border-rose-400');
+                        selectedColA = null;
+                        selectedColB = null;
+                    }, 500);
+                }
+            }
+        }
+
+        function resetMatchGame() {
+            playSound('click');
+            selectedColA = null;
+            selectedColB = null;
+            matchMatches = 0;
+            document.getElementById('match-score-badge').innerText = `Padanan: 0 / 5`;
+            renderMatchGame();
+            recalculateTotalScore();
+        }
+
+        /* MINI GAME ARCADE CATCHER LOGIC */
+        let gameTimer = 30;
+        let gameInterval = null;
+        let spawnInterval = null;
+        let isGameRunning = false;
+
+        const validTerms = ["Brand Name", "Brand Mark", "Trademark", "Trade Character", "Demonstrasi", "Perbandingan", "Penyampaian Fakta", "Kenyataan Merangsang", "Gambar Pegun", "Media Cetak", "Philip Kotler"];
+        const invalidTerms = ["Seni Lukis", "Nota Muzik", "Geografi", "Sains Sukan", "Sejarah Kuno", "Algebra", "Fonetik"];
+
+        function startArcadeGame() {
+            playSound('click');
+            document.getElementById('game-overlay').classList.add('hidden');
+            gameTimer = 30;
+            miniGameScore = 0;
+            isGameRunning = true;
+
+            document.getElementById('game-timer').innerText = gameTimer;
+            document.getElementById('game-points').innerText = miniGameScore;
+            document.getElementById('game-area').innerHTML = '';
+
+            gameInterval = setInterval(() => {
+                gameTimer--;
+                document.getElementById('game-timer').innerText = gameTimer;
+                if (gameTimer <= 0) {
+                    endArcadeGame();
+                }
+            }, 1000);
+
+            spawnInterval = setInterval(spawnGameTarget, 900);
+        }
+
+        function spawnGameTarget() {
+            if (!isGameRunning) return;
+            const area = document.getElementById('game-area');
+            const isValid = Math.random() > 0.35; // 65% valid
+            const text = isValid ? validTerms[Math.floor(Math.random() * validTerms.length)] : invalidTerms[Math.floor(Math.random() * invalidTerms.length)];
+
+            const target = document.createElement('div');
+            const leftPos = Math.floor(Math.random() * 70) + 10;
+            const topPos = Math.floor(Math.random() * 60) + 10;
+
+            target.className = `absolute px-3 py-1.5 rounded-xl font-bold text-xs cursor-pointer shadow-lg transition transform hover:scale-110 animate-bounce ${isValid ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white' : 'bg-gradient-to-r from-rose-500 to-amber-500 text-white'}`;
+            target.style.left = leftPos + '%';
+            target.style.top = topPos + '%';
+            target.innerText = text;
+
+            target.onclick = () => {
+                if (isValid) {
+                    playSound('correct');
+                    miniGameScore += 10;
+                } else {
+                    playSound('wrong');
+                    miniGameScore = Math.max(0, miniGameScore - 5);
+                }
+                document.getElementById('game-points').innerText = miniGameScore;
+                target.remove();
+            };
+
+            area.appendChild(target);
+
+            // Auto removal after 2.5s
+            setTimeout(() => { if (target.parentNode) target.remove(); }, 2500);
+        }
+
+        function endArcadeGame() {
+            isGameRunning = false;
+            clearInterval(gameInterval);
+            clearInterval(spawnInterval);
+
+            playSound('fanfare');
+            document.getElementById('minigame-score-display').innerText = `Skor Mini Game: ${miniGameScore} pts`;
+            
+            const overlay = document.getElementById('game-overlay');
+            overlay.classList.remove('hidden');
+            document.getElementById('overlay-title').innerText = "Masa Tamat!";
+            document.getElementById('overlay-desc').innerHTML = `Taniah! Markah terkumpul Mini Game anda: <strong class="text-amber-400 text-lg">${miniGameScore} mata</strong>.`;
+            
+            recalculateTotalScore();
+        }
+
+        /* TOGGLE FAST ANSWER */
+        function toggleAnswer(btn) {
+            playSound('click');
+            const p = btn.nextElementSibling;
+            p.classList.toggle('hidden');
+            btn.innerText = p.classList.contains('hidden') ? 'Tunjukkan Jawapan' : 'Sembunyikan Jawapan';
+        }
+
+        /* RECALCULATE TOTAL SCORE & CERTIFICATE ELIGIBILITY */
+        function recalculateTotalScore() {
+            // Weights: Quiz 40%, Match 30%, Mini Game 30%
+            const quizWeighted = (quizScore / 10) * 40;
+            const matchWeighted = (matchMatches / 5) * 30;
+            const miniWeighted = Math.min(30, (miniGameScore / 100) * 30); // Max 30% for 100pts
+
+            const totalScore = Math.round(quizWeighted + matchWeighted + miniWeighted);
+
+            document.getElementById('summary-quiz-score').innerText = `${quizScore} / 10`;
+            document.getElementById('summary-match-score').innerText = `${matchMatches} / 5`;
+            document.getElementById('summary-mini-score').innerText = `${miniGameScore} pts`;
+            document.getElementById('summary-total-score').innerText = `${totalScore}%`;
+            document.getElementById('nav-score-display').innerText = `${totalScore}%`;
+            document.getElementById('cert-score-num').innerText = `${totalScore}%`;
+
+            const passStatusEl = document.getElementById('summary-pass-status');
+            const statusBadge = document.getElementById('profile-status-badge');
+            const btnCert = document.getElementById('download-cert-btn');
+            const certMsg = document.getElementById('cert-eligible-msg');
+
+            const hasNameAndClass = studentProfile.name && studentProfile.class;
+
+            if (totalScore >= 70) {
+                passStatusEl.innerText = "LULUS CEMERLANG!";
+                passStatusEl.className = "text-[10px] font-bold text-emerald-400 block mt-0.5";
+                statusBadge.innerText = "LULUS (>=70%)";
+                statusBadge.className = "font-bold text-emerald-400";
+
+                if (hasNameAndClass) {
+                    btnCert.disabled = false;
+                    btnCert.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnCert.classList.add('hover:scale-105');
+                    certMsg.innerHTML = '<span class="text-emerald-400 font-bold">Syarat dipenuhi! Sijil sedia untuk dimuat turun.</span>';
+                } else {
+                    btnCert.disabled = true;
+                    btnCert.classList.add('opacity-50', 'cursor-not-allowed');
+                    certMsg.innerHTML = '<span class="text-amber-400 font-bold">Skor cukup! Sila masukkan Nama & Kelas di bahagian Profil untuk muat turun.</span>';
+                }
+            } else {
+                passStatusEl.innerText = `Memerlukan ${70 - totalScore}% lagi`;
+                passStatusEl.className = "text-[10px] font-bold text-amber-300 block mt-0.5";
+                statusBadge.innerText = "Belum Lulus (<70%)";
+                statusBadge.className = "font-bold text-amber-400";
+
+                btnCert.disabled = true;
+                btnCert.classList.add('opacity-50', 'cursor-not-allowed');
+                certMsg.innerText = "Sila lengkapkan aktiviti di atas sehingga jumlah skor mencapai sekurang-kurangnya 70%.";
+            }
+        }
+
+        /* GENERATE & DOWNLOAD PDF CERTIFICATE */
+        function downloadCertificatePDF() {
+            playSound('fanfare');
+            
+            // Trigger confetti celebration
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+            }
+
+            const certElement = document.getElementById('sijil-container');
+            const opt = {
+                margin:       0.3,
+                filename:     `Sijil_RBT_T3_${studentProfile.name.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(certElement).save();
+        }
+
+        /* INITIALIZATION ON LOAD */
+        window.onload = function() {
+            renderQuiz();
+            renderMatchGame();
+            recalculateTotalScore();
+        };
+    </script>
+</body>
+</html>
